@@ -1,18 +1,15 @@
 library(readr)
-real <- suppressWarnings(read_csv("C:/Users/Adenilson Jr/Desktop/Chicago_Crimes_2012_to_2017.csv"))
-#real <- read_csv("C:/Users/ra164912/Desktop/Chicago_Crimes_2012_to_2017.csv")
-banco <- real[ , c(4, 7, 21, 22)]
+chicago <- read_csv("C:/Users/ra164912/Desktop/Chicago_Crimes_2012_to_2017.csv")
 
-library(tidyr)
-#Tira a hora
-banco <- separate(banco, Date, c("Date", "Hour", "MeioDia"), sep = " ")
-banco <- banco[ ,-c(2, 3)]
-
+findNA <-  which(is.na(chicago$Location)) #achando os valores NA
+chicago <- chicago[-findNA,]                #tirando do banco
+chicago <- chicago[ , c(4, 7, 9, 19, 21, 22)] #pegando as colunas de interesse
+chicago <- separate(chicago, Date, c("Date", "Hour", "MeioDia"), sep = " ")#separando coluna
+chicago <- chicago[ ,-c(2, 3)] #elimino as que naum preciso
+names(chicago)[c(2)] <- c("tipoCrime")
 #Tira o dia
 banco <- separate(banco, Date, c("Mes", "Dia", "Ano"), sep = "/")
 banco <- banco[ ,-2] 
-banco[,c(1,2)] <- banco[,c(2,1)]
-names(banco)[c(1,2)] <- names(banco)[c(2,1)]
 
 #Altera o nome das colunas
 names(banco)[3] <- c("Tipo de Crime")
